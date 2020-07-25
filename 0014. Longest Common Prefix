@@ -18,7 +18,7 @@ Note:
 All given inputs are in lowercase letters a-z.
 
 
-----------------------------------------------------
+-----------------------------------------------------
 class Solution {
 public:
     string longestCommonPrefix(vector<string>& strs) {
