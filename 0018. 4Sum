@@ -1,0 +1,64 @@
+Given an array nums of n integers and an integer target, are there elements a, b, c, and d in nums such that a + b + c + d = target? Find all unique quadruplets in the array which gives the sum of target.
+
+Note:
+
+The solution set must not contain duplicate quadruplets.
+
+Example:
+
+Given array nums = [1, 0, -1, 0, -2, 2], and target = 0.
+
+A solution set is:
+[
+  [-1,  0, 0, 1],
+  [-2, -1, 1, 2],
+  [-2,  0, 0, 2]
+]
+
+
+-------------------------------------------------------
+class Solution {
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        vector<vector<int>> ans;
+        if (nums.size() < 4) {
+            return ans;
+        }
+        sort(nums.begin(), nums.end());
+        vector<int> tmp(4);
+        for (int i = 0; i < nums.size() - 3; i++) {
+            if (i != 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            for (int j = i + 1; j < nums.size() - 2; j++) {
+                if (j != i + 1 && nums[j] == nums[j - 1]) {
+                    continue;
+                }
+                int begin = j + 1, end = nums.size() - 1;
+                while (begin < end) {
+                    int sum = nums[i] + nums[j] + nums[begin] + nums[end];
+                    if (sum == target) {
+                        tmp[0] = nums[i];
+                        tmp[1] = nums[j];
+                        tmp[2] = nums[begin];
+                        tmp[3] = nums[end];
+                        ans.push_back(tmp);
+                        begin++;
+                        end--;
+                        while (begin < end && nums[begin] == nums[begin - 1]) {
+                            begin++;
+                        }
+                        while (begin < end && nums[end] == nums[end + 1]) {
+                            end--;
+                        }
+                    } else if (sum > target) {
+                        end--;
+                    } else {
+                        begin++;
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+};
