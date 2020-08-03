@@ -57,3 +57,34 @@ public:
         return v;
     }
 };
+
+-----------------------------------------------------------
+class Solution {
+public:
+    void dfs(vector<vector<int>> &v, vector<int> &sol, vector<int> &cand, int rest, int k) {
+        if (rest == 0) {
+            v.push_back(sol);
+            return;
+        }
+        if (rest < 0) {
+            return;
+        }
+        for (int i = k; i < cand.size(); i++) {
+            if (i != k && cand[i] == cand[i - 1]) { //!!
+                continue;
+            }
+            sol.push_back(cand[i]);
+            rest -= cand[i];
+            dfs(v, sol, cand, rest, i + 1);
+            rest += cand[i];
+            sol.pop_back();
+        }
+    }
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        vector<vector<int>> v;
+        vector<int> sol;
+        sort(candidates.begin(), candidates.end());
+        dfs(v, sol, candidates, target, 0);
+        return v;
+    }
+};
