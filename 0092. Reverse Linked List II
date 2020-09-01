@@ -1,0 +1,81 @@
+Reverse a linked list from position m to n. Do it in one-pass.
+
+Note: 1 ≤ m ≤ n ≤ length of list.
+
+Example:
+
+Input: 1->2->3->4->5->NULL, m = 2, n = 4
+Output: 1->4->3->2->5->NULL
+
+
+----------------------------------------------
+开辟数组暂存
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int m, int n) {
+        if (m > n) {
+            swap(m, n);
+        }
+        vector<int> v;
+        ListNode *ans = head, *p = head;
+        int cnt = 1;
+        while (head != NULL && cnt < m) {
+            cnt++;
+            head = head -> next;
+        }
+        p = head;
+        while (head != NULL && cnt <= n) {
+            cnt++;
+            v.push_back(head -> val);
+            head = head -> next;
+        }
+        for (int i = v.size() - 1; i >= 0; i--) {
+            p -> val = v[i];
+            p = p -> next;
+        }
+        return ans;
+    }
+};
+------------------------------------
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *pro = NULL;
+    ListNode *reverse(ListNode *head, int n) {
+        if (n == 1) {
+            pro = head -> next;
+            return head;
+        }
+        ListNode *last = reverse(head -> next, n - 1);
+        head -> next -> next = head;
+        head -> next = pro;
+        return last;
+    }
+    
+    ListNode* reverseBetween(ListNode* head, int m, int n) {
+        if (m == 1) {
+            return reverse(head, n);
+        }
+        head -> next = reverseBetween(head -> next, m - 1, n - 1);
+        return head;
+    }
+};
